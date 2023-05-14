@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.serviceInterface.IUserProfileService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Fabricio
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200/","https://argentinaprograma4frontend.web.app/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "https://argentinaprograma4frontend.web.app/"})
 @RequestMapping("userProfile")
 public class UserProfileController {
 
@@ -38,14 +39,38 @@ public class UserProfileController {
 
     @GetMapping("/getUserProfile/{id}")
     public ResponseEntity<UserProfile> getUserProfile(@PathVariable Long id) {
+        if (iUserProfileService.getUserProfile(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(iUserProfileService.getUserProfile(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updateUserProfile/{id}")
+    public ResponseEntity<?> updateUserProfile(@PathVariable Long id, @RequestBody UserProfileDTO userProfileDto) {
+        if (StringUtils.isBlank(userProfileDto.getUserProfileName())) {
+            return new ResponseEntity(new Message("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        }
+        if (StringUtils.isBlank(userProfileDto.getUserProfileSurname())) {
+            return new ResponseEntity(new Message("El apellido es obligatorio"), HttpStatus.BAD_REQUEST);
+        }
+        UserProfile userProfile = iUserProfileService.getUserProfile(id).get();
+        userProfile.setUserProfileName(userProfileDto.getUserProfileName());
+        userProfile.setUserProfileSurname(userProfileDto.getUserProfileSurname());
+        userProfile.setUserProfileTitle(userProfileDto.getUserProfileTitle());
+        userProfile.setUserProfileAbout(userProfileDto.getUserProfileAbout());
+        if (!StringUtils.isBlank(userProfileDto.getUserProfileImage())) {
+            userProfile.setUserProfileImage(userProfileDto.getUserProfileImage());
+        }
+        iUserProfileService.saveUserProfile(userProfile);
+        return new ResponseEntity(new Message("Usuario actualizado"), HttpStatus.OK);
+    }
+//
 //    @GetMapping("/getUserProfiles")
 //    public ResponseEntity<List<UserProfile>> getUserProfiles() {
 //        return new ResponseEntity(iUserProfileService.getUserProfiles(), HttpStatus.OK);
 //    }
-
+//    
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @PostMapping("/saveUserProfile")
 //    public ResponseEntity<?> saveUserProfile(@RequestBody UserProfileDTO userProfileDto) {
@@ -65,31 +90,7 @@ public class UserProfileController {
 //        iUserProfileService.saveUserProfile(userProfile);
 //        return new ResponseEntity(new Message("Usuario agregado"), HttpStatus.OK);
 //    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/updateUserProfile/{id}")
-    public ResponseEntity<?> updateUserProfile(@PathVariable Long id, @RequestBody UserProfileDTO userProfileDto) {
-        if (StringUtils.isBlank(userProfileDto.getUserProfileName())) {
-            return new ResponseEntity(new Message("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(userProfileDto.getUserProfileSurname())) {
-            return new ResponseEntity(new Message("El apellido es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(userProfileDto.getUserProfileImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(userProfileDto.getUserProfileAbout())) {
-            return new ResponseEntity(new Message("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        UserProfile userProfile = iUserProfileService.getUserProfile(id).get();
-        userProfile.setUserProfileName(userProfileDto.getUserProfileName());
-        userProfile.setUserProfileSurname(userProfileDto.getUserProfileSurname());
-        userProfile.setUserProfileImage(userProfileDto.getUserProfileImage());
-        userProfile.setUserProfileAbout(userProfileDto.getUserProfileAbout());
-        iUserProfileService.saveUserProfile(userProfile);
-        return new ResponseEntity(new Message("Usuario actualizado"), HttpStatus.OK);
-    }
-
+//    
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @DeleteMapping("/deleteUserProfile/{id}")
 //    public ResponseEntity<?> deleteUserProfile(@PathVariable Long id) {
@@ -99,5 +100,5 @@ public class UserProfileController {
 //        iUserProfileService.deleteUserProfile(id);
 //        return new ResponseEntity(new Message("Usuario eliminada"), HttpStatus.OK);
 //    }
-
+//
 }

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Fabricio
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200/","https://argentinaprograma4frontend.web.app/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "https://argentinaprograma4frontend.web.app/"})
 @RequestMapping("skill")
 public class SkillController {
 
@@ -38,6 +38,9 @@ public class SkillController {
 
     @GetMapping("/getSkill/{id}")
     public ResponseEntity<Skill> getSkill(@PathVariable Long id) {
+        if (iSkillService.getSkill(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(iSkillService.getSkill(id), HttpStatus.OK);
     }
 
@@ -52,6 +55,9 @@ public class SkillController {
         if (StringUtils.isBlank(skillDto.getSkillName())) {
             return new ResponseEntity(new Message("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
+        if (skillDto.getSkillProgress() == 0) {
+            return new ResponseEntity(new Message("El progreso es obligatorio"), HttpStatus.BAD_REQUEST);
+        }
         Skill skill = new Skill(skillDto.getSkillName(), skillDto.getSkillProgress());
         iSkillService.saveSkill(skill);
         return new ResponseEntity(new Message("Habilidad agregada"), HttpStatus.OK);
@@ -63,6 +69,9 @@ public class SkillController {
         if (StringUtils.isBlank(skillDto.getSkillName())) {
             return new ResponseEntity(new Message("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
+        if (StringUtils.isBlank(String.valueOf(skillDto.getSkillProgress()))) {
+            return new ResponseEntity(new Message("El progreso es obligatorio"), HttpStatus.BAD_REQUEST);
+        }
         Skill skill = iSkillService.getSkill(id).get();
         skill.setSkillName(skillDto.getSkillName());
         skill.setSkillProgress(skillDto.getSkillProgress());
@@ -72,7 +81,8 @@ public class SkillController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteSkill/{id}")
-    public ResponseEntity<?> deleteSkill(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSkill(@PathVariable Long id
+    ) {
         if (iSkillService.getSkill(id) == null) {
             return new ResponseEntity(new Message("Habilidad no existe"), HttpStatus.BAD_REQUEST);
         }

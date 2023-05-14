@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Fabricio
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200/","https://argentinaprograma4frontend.web.app/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "https://argentinaprograma4frontend.web.app/"})
 @RequestMapping("education")
 public class EducationController {
 
@@ -38,6 +38,9 @@ public class EducationController {
 
     @GetMapping("/getEducation/{id}")
     public ResponseEntity<Education> getEducation(@PathVariable Long id) {
+        if (iEducationService.getEducation(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(iEducationService.getEducation(id), HttpStatus.OK);
     }
 
@@ -52,17 +55,11 @@ public class EducationController {
         if (StringUtils.isBlank(educationDto.getEducationInstitution())) {
             return new ResponseEntity(new Message("La institucion es obligatoria"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(educationDto.getEducationImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         if (StringUtils.isBlank(educationDto.getEducationTitle())) {
             return new ResponseEntity(new Message("El titulo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(educationDto.getEducationPeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(educationDto.getEducationUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         Education education = new Education(educationDto.getEducationUrl(), educationDto.getEducationImage(), educationDto.getEducationTitle(), educationDto.getEducationPeriod(), educationDto.getEducationInstitution());
         iEducationService.saveEducation(education);
@@ -72,14 +69,8 @@ public class EducationController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateEducation/{id}")
     public ResponseEntity<?> updateEducation(@PathVariable Long id, @RequestBody EducationDTO educationDto) {
-        if (iEducationService.getEducation(id) == null) {
-            return new ResponseEntity(new Message("Educacion no existe"), HttpStatus.BAD_REQUEST);
-        }
         if (StringUtils.isBlank(educationDto.getEducationInstitution())) {
             return new ResponseEntity(new Message("La institucion es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(educationDto.getEducationImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(educationDto.getEducationTitle())) {
             return new ResponseEntity(new Message("El titulo es obligatorio"), HttpStatus.BAD_REQUEST);
@@ -87,15 +78,14 @@ public class EducationController {
         if (StringUtils.isBlank(educationDto.getEducationPeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(educationDto.getEducationUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         Education education = iEducationService.getEducation(id).get();
         education.setEducationUrl(educationDto.getEducationUrl());
-        education.setEducationImage(educationDto.getEducationImage());
         education.setEducationTitle(educationDto.getEducationTitle());
         education.setEducationPeriod(educationDto.getEducationPeriod());
         education.setEducationInstitution(educationDto.getEducationInstitution());
+        if (!StringUtils.isBlank(educationDto.getEducationImage())) {
+            education.setEducationImage(educationDto.getEducationImage());
+        }
         iEducationService.saveEducation(education);
         return new ResponseEntity(new Message("Educacion actualizada"), HttpStatus.OK);
     }

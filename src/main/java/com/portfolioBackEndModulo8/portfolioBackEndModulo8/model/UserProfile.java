@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -20,30 +21,27 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String userProfileName;
 
+    @NotNull
     private String userProfileSurname;
 
     private String userProfileImage;
 
+    private String userProfileTitle;
+    
     private String userProfileAbout;
 
     public UserProfile() {
     }
 
-    public UserProfile(String userProfileName, String userProfileSurname, String userProfileImage, String userProfileAbout) {
+    public UserProfile(String userProfileName, String userProfileSurname, String userProfileImage, String userProfileTitle, String userProfileAbout) {
         this.userProfileName = userProfileName;
         this.userProfileSurname = userProfileSurname;
         this.userProfileImage = userProfileImage;
+        this.userProfileTitle = userProfileTitle;
         this.userProfileAbout = userProfileAbout;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserProfileName() {
@@ -70,6 +68,14 @@ public class UserProfile {
         this.userProfileImage = userProfileImage;
     }
 
+    public String getUserProfileTitle() {
+        return userProfileTitle;
+    }
+
+    public void setUserProfileTitle(String userProfileTitle) {
+        this.userProfileTitle = userProfileTitle;
+    }
+
     public String getUserProfileAbout() {
         return userProfileAbout;
     }
@@ -79,4 +85,4 @@ public class UserProfile {
     }
     
 
-}
+    }

@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -24,12 +25,16 @@ public class Project {
 
     private String projectImage;
 
+    @NotNull
     private String projectTitle;
 
+    @NotNull
     private String projectDescription;
 
+    @NotNull
     private String projectPeriod;
 
+    @NotNull
     private String projectTechnology;
 
     public Project() {

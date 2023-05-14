@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -24,10 +25,13 @@ public class Education {
 
     private String educationImage;
 
+    @NotNull
     private String educationTitle;
 
+    @NotNull
     private String educationPeriod;
 
+    @NotNull
     private String educationInstitution;
 
     public Education() {

@@ -4,9 +4,7 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.controller;
 
-import com.portfolioBackEndModulo8.portfolioBackEndModulo8.dto.EducationDTO;
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.dto.ProjectDTO;
-import com.portfolioBackEndModulo8.portfolioBackEndModulo8.model.Education;
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.model.Project;
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.security.controller.Message;
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.serviceInterface.IProjectService;
@@ -31,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Fabricio
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200/","https://argentinaprograma4frontend.web.app/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "https://argentinaprograma4frontend.web.app/"})
 @RequestMapping("project")
 public class ProjectController {
 
@@ -40,6 +38,9 @@ public class ProjectController {
 
     @GetMapping("/getProject/{id}")
     public ResponseEntity<Project> getProject(@PathVariable Long id) {
+        if (iProjectService.getProject(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(iProjectService.getProject(id), HttpStatus.OK);
     }
 
@@ -51,20 +52,14 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/saveProject")
     public ResponseEntity<?> saveProject(@RequestBody ProjectDTO projectDto) {
-        if (StringUtils.isBlank(projectDto.getProjectDescription())) {
-            return new ResponseEntity(new Message("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(projectDto.getProjectImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         if (StringUtils.isBlank(projectDto.getProjectTitle())) {
             return new ResponseEntity(new Message("El titulo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(projectDto.getProjectPeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(projectDto.getProjectUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(projectDto.getProjectDescription())) {
+            return new ResponseEntity(new Message("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(projectDto.getProjectTechnology())) {
             return new ResponseEntity(new Message("La tecnologia es obligatoria"), HttpStatus.BAD_REQUEST);
@@ -77,31 +72,27 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateProject/{id}")
     public ResponseEntity<?> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDto) {
-        if (StringUtils.isBlank(projectDto.getProjectDescription())) {
-            return new ResponseEntity(new Message("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(projectDto.getProjectImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         if (StringUtils.isBlank(projectDto.getProjectTitle())) {
             return new ResponseEntity(new Message("El titulo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(projectDto.getProjectPeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(projectDto.getProjectUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(projectDto.getProjectDescription())) {
+            return new ResponseEntity(new Message("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(projectDto.getProjectTechnology())) {
             return new ResponseEntity(new Message("La tecnologia es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         Project project = iProjectService.getProject(id).get();
         project.setProjectUrl(projectDto.getProjectUrl());
-        project.setProjectImage(projectDto.getProjectImage());
         project.setProjectTitle(projectDto.getProjectTitle());
         project.setProjectPeriod(projectDto.getProjectPeriod());
         project.setProjectDescription(projectDto.getProjectDescription());
         project.setProjectTechnology(projectDto.getProjectTechnology());
+        if (!StringUtils.isBlank(projectDto.getProjectImage())) {
+            project.setProjectImage(projectDto.getProjectImage());
+        }
         iProjectService.saveProject(project);
         return new ResponseEntity(new Message("Proyecto actualizado"), HttpStatus.OK);
     }

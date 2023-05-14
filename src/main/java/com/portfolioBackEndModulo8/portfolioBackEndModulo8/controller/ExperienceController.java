@@ -29,40 +29,37 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Fabricio
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200/","https://argentinaprograma4frontend.web.app/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "https://argentinaprograma4frontend.web.app/"})
 @RequestMapping("experience")
 public class ExperienceController {
 
     @Autowired
     IExperienceService iExperienceService;
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/getExperience/{id}")
     public ResponseEntity<Experience> getExperience(@PathVariable Long id) {
+        if (iExperienceService.getExperience(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(iExperienceService.getExperience(id), HttpStatus.OK);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/getExperiences")
     public ResponseEntity<List<Experience>> getExperiences() {
         return new ResponseEntity(iExperienceService.getExperiences(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<?> createExperience(@RequestBody ExperienceDTO experienceDto) {
-        if (StringUtils.isBlank(experienceDto.getExperienceActivity())) {
-            return new ResponseEntity(new Message("La actividad es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(experienceDto.getExperienceImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping("/saveExperience")
+    public ResponseEntity<?> saveExperience(@RequestBody ExperienceDTO experienceDto) {
         if (StringUtils.isBlank(experienceDto.getExperienceJobTitle())) {
             return new ResponseEntity(new Message("El puesto es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(experienceDto.getExperiencePeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(experienceDto.getExperienceUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(experienceDto.getExperienceActivity())) {
+            return new ResponseEntity(new Message("La actividad es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         Experience experience = new Experience(experienceDto.getExperienceUrl(), experienceDto.getExperienceImage(), experienceDto.getExperienceJobTitle(), experienceDto.getExperiencePeriod(), experienceDto.getExperienceActivity());
         iExperienceService.saveExperience(experience);
@@ -70,38 +67,31 @@ public class ExperienceController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/update/{id}")
+    @PutMapping("/updateExperience/{id}")
     public ResponseEntity<?> updateExperince(@PathVariable Long id, @RequestBody ExperienceDTO experienceDto) {
-        if (iExperienceService.getExperience(id) == null) {
-            return new ResponseEntity(new Message("Experiencia no existe"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(experienceDto.getExperienceActivity())) {
-            return new ResponseEntity(new Message("La actividad es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(experienceDto.getExperienceImage())) {
-            return new ResponseEntity(new Message("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         if (StringUtils.isBlank(experienceDto.getExperienceJobTitle())) {
             return new ResponseEntity(new Message("El puesto es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         if (StringUtils.isBlank(experienceDto.getExperiencePeriod())) {
             return new ResponseEntity(new Message("El periodo es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if (StringUtils.isBlank(experienceDto.getExperienceUrl())) {
-            return new ResponseEntity(new Message("La URL es obligatoria"), HttpStatus.BAD_REQUEST);
+        if (StringUtils.isBlank(experienceDto.getExperienceActivity())) {
+            return new ResponseEntity(new Message("La actividad es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         Experience experience = iExperienceService.getExperience(id).get();
         experience.setExperienceUrl(experienceDto.getExperienceUrl());
-        experience.setExperienceImage(experienceDto.getExperienceImage());
         experience.setExperienceJobTitle(experienceDto.getExperienceJobTitle());
         experience.setExperiencePeriod(experienceDto.getExperiencePeriod());
         experience.setExperienceActivity(experienceDto.getExperienceActivity());
+        if (!StringUtils.isBlank(experienceDto.getExperienceImage())) {
+            experience.setExperienceImage(experienceDto.getExperienceImage());
+        }
         iExperienceService.saveExperience(experience);
         return new ResponseEntity(new Message("Experiencia actualizada"), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteExperience/{id}")
     public ResponseEntity<?> deleteExperience(@PathVariable Long id) {
         if (iExperienceService.getExperience(id) == null) {
             return new ResponseEntity(new Message("Experiencia no existe"), HttpStatus.BAD_REQUEST);

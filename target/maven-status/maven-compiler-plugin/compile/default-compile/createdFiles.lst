@@ -31,7 +31,6 @@ com\portfolioBackEndModulo8\portfolioBackEndModulo8\security\dto\UserLogin.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\security\enums\RoleName.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\model\Project.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\security\service\RoleService.class
-com\portfolioBackEndModulo8\portfolioBackEndModulo8\WebConfig.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\controller\EducationController.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\dto\EducationDTO.class
 com\portfolioBackEndModulo8\portfolioBackEndModulo8\dto\ProjectDTO.class

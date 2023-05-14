@@ -4,7 +4,6 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.serviceInterface;
 
-
 import com.portfolioBackEndModulo8.portfolioBackEndModulo8.model.UserProfile;
 import java.util.List;
 import java.util.Optional;

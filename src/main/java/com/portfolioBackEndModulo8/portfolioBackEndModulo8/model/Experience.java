@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 
 /**
  *
@@ -24,10 +25,13 @@ public class Experience {
 
     private String experienceImage;
 
+    @NotNull
     private String experienceJobTitle;
 
+    @NotNull
     private String experiencePeriod;
 
+    @NotNull
     private String experienceActivity;
 
     public Experience() {

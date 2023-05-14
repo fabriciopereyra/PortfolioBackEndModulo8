@@ -22,15 +22,19 @@ public class UserProfileDTO {
     private String userProfileImage;
 
     @NotBlank
+    private String userProfileTitle;
+    
+    @NotBlank
     private String userProfileAbout;
 
     public UserProfileDTO() {
     }
 
-    public UserProfileDTO(String userProfileName, String userProfileSurname, String userProfileImage, String userProfileAbout) {
+    public UserProfileDTO(String userProfileName, String userProfileSurname, String userProfileImage, String userProfileTitle, String userProfileAbout) {
         this.userProfileName = userProfileName;
         this.userProfileSurname = userProfileSurname;
         this.userProfileImage = userProfileImage;
+        this.userProfileTitle = userProfileTitle;
         this.userProfileAbout = userProfileAbout;
     }
 
@@ -58,6 +62,14 @@ public class UserProfileDTO {
         this.userProfileImage = userProfileImage;
     }
 
+    public String getUserProfileTitle() {
+        return userProfileTitle;
+    }
+
+    public void setUserProfileTitle(String userProfileTitle) {
+        this.userProfileTitle = userProfileTitle;
+    }
+
     public String getUserProfileAbout() {
         return userProfileAbout;
     }
@@ -66,7 +78,4 @@ public class UserProfileDTO {
         this.userProfileAbout = userProfileAbout;
     }
 
-    
-}
-
-    
+    }
