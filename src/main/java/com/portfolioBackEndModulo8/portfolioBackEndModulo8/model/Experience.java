@@ -4,6 +4,7 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,8 +22,10 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 1000)
     private String experienceUrl;
 
+    @Column(length = 1000)
     private String experienceImage;
 
     @NotNull
@@ -32,17 +35,22 @@ public class Experience {
     private String experiencePeriod;
 
     @NotNull
+    @Column(length = 1000)
     private String experienceActivity;
+    
+    @NotNull
+    private String experienceInstitution;
 
     public Experience() {
     }
 
-    public Experience(String experienceUrl, String experienceImage, String experienceJobTitle, String experiencePeriod, String experienceActivity) {
+    public Experience(String experienceUrl, String experienceImage, String experienceJobTitle, String experiencePeriod, String experienceActivity, String experienceInstitution) {
         this.experienceUrl = experienceUrl;
         this.experienceImage = experienceImage;
         this.experienceJobTitle = experienceJobTitle;
         this.experiencePeriod = experiencePeriod;
         this.experienceActivity = experienceActivity;
+        this.experienceInstitution = experienceInstitution;
     }
 
     public Long getId() {
@@ -93,4 +101,13 @@ public class Experience {
         this.experienceActivity = experienceActivity;
     }
 
+    public String getExperienceInstitution() {
+        return experienceInstitution;
+    }
+
+    public void setExperienceInstitution(String experienceInstitution) {
+        this.experienceInstitution = experienceInstitution;
+    }
+
+    
 }

@@ -61,7 +61,7 @@ public class ExperienceController {
         if (StringUtils.isBlank(experienceDto.getExperienceActivity())) {
             return new ResponseEntity(new Message("La actividad es obligatoria"), HttpStatus.BAD_REQUEST);
         }
-        Experience experience = new Experience(experienceDto.getExperienceUrl(), experienceDto.getExperienceImage(), experienceDto.getExperienceJobTitle(), experienceDto.getExperiencePeriod(), experienceDto.getExperienceActivity());
+        Experience experience = new Experience(experienceDto.getExperienceUrl(), experienceDto.getExperienceImage(), experienceDto.getExperienceJobTitle(), experienceDto.getExperiencePeriod(), experienceDto.getExperienceActivity(), experienceDto.getExperienceInstitution());
         iExperienceService.saveExperience(experience);
         return new ResponseEntity(new Message("Experiencia agregada"), HttpStatus.OK);
     }
@@ -83,6 +83,7 @@ public class ExperienceController {
         experience.setExperienceJobTitle(experienceDto.getExperienceJobTitle());
         experience.setExperiencePeriod(experienceDto.getExperiencePeriod());
         experience.setExperienceActivity(experienceDto.getExperienceActivity());
+        experience.setExperienceInstitution(experienceDto.getExperienceInstitution());
         if (!StringUtils.isBlank(experienceDto.getExperienceImage())) {
             experience.setExperienceImage(experienceDto.getExperienceImage());
         }

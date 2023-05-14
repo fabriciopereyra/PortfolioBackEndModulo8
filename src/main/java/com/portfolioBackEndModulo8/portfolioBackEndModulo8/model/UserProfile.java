@@ -4,6 +4,7 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,10 +28,13 @@ public class UserProfile {
     @NotNull
     private String userProfileSurname;
 
+    @Column(length = 1000)
     private String userProfileImage;
 
+    @Column(length = 500)
     private String userProfileTitle;
     
+    @Column(length = 1000)
     private String userProfileAbout;
 
     public UserProfile() {

@@ -26,16 +26,20 @@ public class ExperienceDTO {
 
     @NotBlank
     private String experienceActivity;
+    
+    @NotBlank
+    private String experienceInstitution;
 
     public ExperienceDTO() {
     }
 
-    public ExperienceDTO(String experienceUrl, String experienceImage, String experienceJobTitle, String experiencePeriod, String experienceActivity) {
+    public ExperienceDTO(String experienceUrl, String experienceImage, String experienceJobTitle, String experiencePeriod, String experienceActivity, String experienceInstitution) {
         this.experienceUrl = experienceUrl;
         this.experienceImage = experienceImage;
         this.experienceJobTitle = experienceJobTitle;
         this.experiencePeriod = experiencePeriod;
         this.experienceActivity = experienceActivity;
+        this.experienceInstitution = experienceInstitution;
     }
 
     public String getExperienceUrl() {
@@ -78,4 +82,12 @@ public class ExperienceDTO {
         this.experienceActivity = experienceActivity;
     }
 
-}
+    public String getExperienceInstitution() {
+        return experienceInstitution;
+    }
+
+    public void setExperienceInstitution(String experienceInstitution) {
+        this.experienceInstitution = experienceInstitution;
+    }
+
+    }

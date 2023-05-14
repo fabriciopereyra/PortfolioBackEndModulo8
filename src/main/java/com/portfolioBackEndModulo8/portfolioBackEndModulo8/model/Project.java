@@ -4,6 +4,7 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,14 +22,17 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 1000)
     private String projectUrl;
 
+    @Column(length = 1000)
     private String projectImage;
 
     @NotNull
     private String projectTitle;
 
     @NotNull
+    @Column(length = 1000)
     private String projectDescription;
 
     @NotNull
