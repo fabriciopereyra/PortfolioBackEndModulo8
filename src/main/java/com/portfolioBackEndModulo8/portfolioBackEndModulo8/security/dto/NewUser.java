@@ -4,6 +4,7 @@
  */
 package com.portfolioBackEndModulo8.portfolioBackEndModulo8.security.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,12 +14,16 @@ import java.util.Set;
  */
 public class NewUser {
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String userName;
 
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String password;
 
     private Set<String> roles = new HashSet<>();
